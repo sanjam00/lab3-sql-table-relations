@@ -73,7 +73,7 @@ df_credit = pd.read_sql("""
                         ORDER BY numCustomers DESC;
                         """, conn)
 
-print(df_credit)
+# print(df_credit)
 
 # STEP 7
 df_product_sold = pd.read_sql("""
@@ -84,13 +84,32 @@ df_product_sold = pd.read_sql("""
                               ORDER BY totalunits DESC;
                               """, conn)
 
-print(df_product_sold)
+# print(df_product_sold)
 
 # STEP 8
-df_total_customers = None
+df_total_customers = pd.read_sql("""
+                                 SELECT p.productName, od.productCode, COUNT(DISTINCT o.customerNumber) AS numpurchasers
+                                 FROM orderDetails od
+                                 JOIN orders o USING(orderNumber)
+                                 JOIN products p USING(productCode)
+                                 GROUP BY p.productName
+                                 ORDER BY numpurchasers DESC;
+                                 """, conn)
+
+# print(df_total_customers)
 
 # STEP 9
-df_customers = None
+# customers per office
+df_customers = pd.read_sql("""
+                           SELECT COUNT(c.customerNumber) AS n_customers, o.officeCode, o.city
+                           FROM offices o
+                           JOIN employees e USING(officeCode)
+                           JOIN customers c
+                            ON e.employeeNumber = c.salesRepEmployeeNumber
+                           GROUP BY officeCode;
+                           """, conn)
+
+# print(df_customers)
 
 # STEP 10
 df_under_20 = None
