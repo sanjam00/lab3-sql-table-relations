@@ -38,7 +38,7 @@ df_employee = pd.read_sql("""
                           ORDER BY firstName, lastName
                           """, conn)
 
-print(df_employee)
+# print(df_employee)
 
 # STEP 4
 df_contacts = pd.read_sql("""
@@ -50,10 +50,17 @@ df_contacts = pd.read_sql("""
                           ORDER BY contactLastName;
                           """, conn)
 
-print(df_contacts)
+# print(df_contacts)
 
 # STEP 5
-df_payment = None
+df_payment = pd.read_sql("""
+                         SELECT c.contactFirstName, c.contactLastName, CAST(p.amount AS FLOAT) AS amount, p.paymentDate
+                         FROM customers c
+                         JOIN payments p USING(customerNumber)
+                         ORDER BY amount DESC
+                         """, conn)
+
+print(df_payment)
 
 # STEP 6
 df_credit = None
