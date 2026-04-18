@@ -11,13 +11,13 @@ pd.read_sql("""SELECT * FROM sqlite_master""", conn)
 
 # STEP 1
 df_boston = pd.read_sql("""
-                        SELECT firstName, lastName, jobTitle, officeCode, city
+                        SELECT firstName, lastName
                         FROM employees
                         JOIN offices USING(officeCode)
                         WHERE officeCode = "2";
                         """, conn)
-# 
-# print(df_boston)
+
+print(df_boston)
 
 # STEP 2
 df_zero_emp = pd.read_sql("""
@@ -28,7 +28,7 @@ df_zero_emp = pd.read_sql("""
                           HAVING numEmployees = 0;
                           """, conn)
 
-# print(df_zero_emp)
+print(df_zero_emp)
 
 # STEP 3
 df_employee = pd.read_sql("""
@@ -60,7 +60,7 @@ df_payment = pd.read_sql("""
                          ORDER BY amount DESC
                          """, conn)
 
-print(df_payment)
+# print(df_payment)
 
 # STEP 6
 df_credit = None
