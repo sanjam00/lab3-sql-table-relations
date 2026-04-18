@@ -17,7 +17,7 @@ df_boston = pd.read_sql("""
                         WHERE officeCode = "2";
                         """, conn)
 
-print(df_boston)
+# print(df_boston)
 
 # STEP 2
 df_zero_emp = pd.read_sql("""
@@ -28,7 +28,7 @@ df_zero_emp = pd.read_sql("""
                           HAVING numEmployees = 0;
                           """, conn)
 
-print(df_zero_emp)
+# print(df_zero_emp)
 
 # STEP 3
 df_employee = pd.read_sql("""
@@ -63,10 +63,28 @@ df_payment = pd.read_sql("""
 # print(df_payment)
 
 # STEP 6
-df_credit = None
+df_credit = pd.read_sql("""
+                        SELECT e.employeeNumber, e.firstName, e.lastName, COUNT(c.customerNumber) AS numCustomers
+                        FROM employees e
+                        JOIN customers C
+                          ON e.employeeNumber = c.salesRepEmployeeNumber
+                        GROUP BY e.employeeNumber
+                        HAVING AVG(creditLimit) > 90000
+                        ORDER BY numCustomers DESC;
+                        """, conn)
+
+print(df_credit)
 
 # STEP 7
-df_product_sold = None
+df_product_sold = pd.read_sql("""
+                              SELECT productName, COUNT(od.productCode) AS numOrders, SUM(od.quantityOrdered) AS totalunits
+                              FROM products p
+                              JOIN orderDetails od USING(productCode)
+                              GROUP BY productName
+                              ORDER BY totalunits DESC;
+                              """, conn)
+
+print(df_product_sold)
 
 # STEP 8
 df_total_customers = None
